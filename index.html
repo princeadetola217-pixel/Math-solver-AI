@@ -1,0 +1,772 @@
+# Math-solver-AI
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2457e6">
+<title>Math Solver AI</title>
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --blue: #2457e6;
+  --dark: #172554;
+  --light: #f3f6ff;
+  --white: #ffffff;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --green: #15803d;
+}
+body {
+  font-family: Arial, sans-serif;
+  background: var(--light);
+  color: var(--dark);
+  min-height: 100vh;
+}
+header {
+  background: var(--white);
+  padding: 17px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.logo {
+  font-size: 19px;
+  font-weight: bold;
+  color: var(--blue);
+}
+.header-badge {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-radius: 20px;
+  padding: 7px 10px;
+  font-size: 11px;
+  font-weight: bold;
+}
+main {
+  max-width: 760px;
+  margin: auto;
+  padding: 22px 15px 100px;
+}
+.hero {
+  background: linear-gradient(135deg, #173db8, #5388ff);
+  color: white;
+  padding: 27px 21px;
+  border-radius: 23px;
+  margin-bottom: 23px;
+}
+.hero .eyebrow {
+  font-size: 12px;
+  margin-bottom: 12px;
+  opacity: .85;
+}
+.hero h1 {
+  font-size: 31px;
+  line-height: 1.2;
+  margin-bottom: 13px;
+}
+.hero p {
+  line-height: 1.7;
+  font-size: 14px;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 23px;
+}
+.stat {
+  background: white;
+  padding: 17px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+.stat strong {
+  display: block;
+  color: var(--blue);
+  font-size: 23px;
+  margin-bottom: 5px;
+}
+.stat span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.card {
+  background: white;
+  padding: 21px 17px;
+  border-radius: 19px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+.card h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+textarea, input, select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  background: white;
+  border-radius: 12px;
+  padding: 14px;
+  font-family: inherit;
+  font-size: 15px;
+  margin-bottom: 12px;
+  outline-color: var(--blue);
+}
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+button {
+  border: none;
+  border-radius: 11px;
+  padding: 13px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+.primary {
+  background: var(--blue);
+  color: white;
+}
+.secondary {
+  background: #e8efff;
+  color: var(--blue);
+}
+.full {
+  width: 100%;
+}
+.button-row {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+.result {
+  display: none;
+  margin-top: 17px;
+  background: #eff6ff;
+  padding: 17px;
+  border-radius: 13px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.result h3 {
+  margin-bottom: 9px;
+  color: #1d4ed8;
+}
+.result p {
+  margin-bottom: 5px;
+}
+.topics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
+}
+.topic {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  padding: 16px 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  text-align: left;
+  color: var(--dark);
+}
+.topic span {
+  display: block;
+  font-size: 25px;
+  margin-bottom: 9px;
+}
+.topic small {
+  display: block;
+  color: var(--muted);
+  margin-top: 5px;
+  font-weight: normal;
+}
+.page {
+  display: none;
+}
+.page.active {
+  display: block;
+}
+.question-box {
+  padding: 15px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  margin: 12px 0;
+  line-height: 1.7;
+}
+.option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: #f1f5f9;
+  color: var(--dark);
+  margin: 8px 0;
+}
+.option:hover {
+  background: #dbeafe;
+}
+.notice {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: 13px;
+}
+.lesson {
+  border-bottom: 1px solid var(--border);
+  padding: 15px 0;
+  line-height: 1.7;
+}
+.lesson:last-child {
+  border-bottom: none;
+}
+nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  background: white;
+  border-top: 1px solid var(--border);
+  padding: 10px 3px calc(10px + env(safe-area-inset-bottom));
+  z-index: 20;
+}
+nav button {
+  background: transparent;
+  color: var(--muted);
+  padding: 7px 5px;
+  font-size: 11px;
+  flex: 1;
+}
+nav button.active {
+  color: var(--blue);
+  background: #eff6ff;
+}
+footer {
+  text-align: center;
+  padding: 22px 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+@media (min-width: 600px) {
+  .hero h1 {
+    font-size: 40px;
+  }
+  main {
+    padding-top: 30px;
+  }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🧮 Math Solver AI</div>
+  <div class="header-badge">JSS 1–3</div>
+</header>
+<main>
+  <!-- HOME -->
+  <section id="home" class="page active">
+<div class="hero">
+  <div class="eyebrow">YOUR PERSONAL MATH TUTOR</div>
+  <h1>Mathematics made easier! 🎓</h1>
+  <p>
+    Learn mathematics, solve problems and understand
+    every step. Your learning journey starts here.
+  </p>
+</div>
+<div class="stats">
+  <div class="stat">
+    <strong id="solvedCount">0</strong>
+    <span>Questions attempted</span>
+  </div>
+  <div class="stat">
+    <strong>JSS 1–3</strong>
+    <span>Learning levels</span>
+  </div>
+</div>
+<div class="card">
+  <h2>🤖 Solve a Question</h2>
+  <p class="subtitle">
+    Type a mathematics question to get started.
+  </p>
+  <textarea id="mathInput"
+    placeholder="Example: Solve 2x + 5 = 15"></textarea>
+  <button class="primary full" onclick="solveMath()">
+    Solve Mathematics →
+  </button>
+  <div id="mathResult" class="result" aria-live="polite"></div>
+  <p class="notice">
+    Demo version: the solver supports selected examples.
+    A connected AI service will be needed for general questions.
+  </p>
+</div>
+<div class="card">
+  <h2>📚 Explore Topics</h2>
+  <p class="subtitle">
+    Choose a subject to explore our sample lessons.
+  </p>
+  <div class="topics">
+    <button class="topic" onclick="openLesson('Fractions')">
+      <span>➗</span>Fractions
+      <small>Numerators and denominators</small>
+    </button>
+    <button class="topic" onclick="openLesson('Algebra')">
+      <span>🔢</span>Algebra
+      <small>Equations and expressions</small>
+    </button>
+    <button class="topic" onclick="openLesson('Geometry')">
+      <span>📐</span>Geometry
+      <small>Shapes and angles</small>
+    </button>
+    <button class="topic" onclick="openLesson('Statistics')">
+      <span>📊</span>Statistics
+      <small>Data and averages</small>
+    </button>
+  </div>
+</div>
+  </section>
+  <!-- LEARN -->
+  <section id="learn" class="page">
+    <div class="card">
+      <h2>📚 Learn Mathematics</h2>
+      <p class="subtitle">
+        Select a topic to read its introductory lesson.
+      </p>
+  <label for="classSelect">Select your class</label>
+  <select id="classSelect">
+    <option>JSS1</option>
+    <option>JSS2</option>
+    <option>JSS3</option>
+  </select>
+  <div id="lessonContent">
+    <div class="lesson">
+      <h3>➗ Fractions</h3>
+      A fraction represents part of a whole.
+      For example, 1/2 means one of two equal parts.
+      <p><strong>Example:</strong> 1/2 + 1/2 = 1.</p>
+    </div>
+    <div class="lesson">
+      <h3>🔢 Algebra</h3>
+      Algebra uses letters to represent unknown numbers.
+      <p><strong>Example:</strong> x + 3 = 7, so x = 4.</p>
+    </div>
+    <div class="lesson">
+      <h3>📐 Geometry</h3>
+      Geometry studies shapes, angles, lengths and areas.
+      <p><strong>Example:</strong> A triangle has three sides.</p>
+    </div>
+    <div class="lesson">
+      <h3>📊 Statistics</h3>
+      Statistics helps us collect and understand data.
+      <p><strong>Example:</strong> The mean of 2, 4 and 6 is 4.</p>
+    </div>
+  </div>
+</div>
+  </section>
+  <!-- PRACTICE -->
+  <section id="practice" class="page">
+    <div class="card">
+      <h2>📝 Practice Quiz</h2>
+      <p class="subtitle">
+        Answer the questions and check your understanding.
+      </p>
+  <div id="quizArea"></div>
+  <button id="nextQuiz" class="primary full"
+    onclick="nextQuestion()">
+    Start Quiz
+  </button>
+  <div id="quizResult" class="result" aria-live="polite"></div>
+</div>
+  </section>
+  <!-- PROGRESS -->
+  <section id="progress" class="page">
+    <div class="card">
+      <h2>📊 Your Progress</h2>
+      <p class="subtitle">
+        Your activity on this device.
+      </p>
+  <div class="question-box">
+    Questions attempted:
+    <strong id="progressCount">0</strong>
+  </div>
+  <div class="question-box">
+    Quiz questions answered:
+    <strong id="quizCount">0</strong>
+  </div>
+  <div class="question-box">
+    Correct quiz answers:
+    <strong id="correctCount">0</strong>
+  </div>
+  <button class="secondary full" onclick="resetProgress()">
+    Reset Progress
+  </button>
+  <p class="notice">
+    Progress is saved locally in this browser when storage
+    is available. It is not synchronized between devices.
+  </p>
+</div>
+  </section>
+  <!-- SETTINGS -->
+  <section id="settings" class="page">
+    <div class="card">
+      <h2>⚙️ Settings</h2>
+      <p class="subtitle">
+        Customize your learning experience.
+      </p>
+  <label for="studentName">Your display name</label>
+  <input id="studentName" placeholder="Enter your name">
+  <label for="studentClass">Your class</label>
+  <select id="studentClass">
+    <option>JSS1</option>
+    <option>JSS2</option>
+    <option>JSS3</option>
+  </select>
+  <button class="primary full" onclick="saveSettings()">
+    Save Settings
+  </button>
+  <div id="settingsResult" class="result"></div>
+  <p class="notice">
+    This prototype does not create accounts or store data
+    on a remote server.
+  </p>
+</div>
+  </section>
+  <footer>
+    Math Solver AI · Learn · Practise · Improve
+  </footer>
+</main>
+<nav aria-label="Main navigation">
+  <button class="active" data-page="home" onclick="showPage('home',this)">🏠<br>Home</button>
+  <button data-page="learn" onclick="showPage('learn',this)">📚<br>Learn</button>
+  <button data-page="practice" onclick="showPage('practice',this)">📝<br>Practice</button>
+  <button data-page="progress" onclick="showPage('progress',this)">📊<br>Progress</button>
+  <button data-page="settings" onclick="showPage('settings',this)">⚙️<br>Settings</button>
+</nav>
+<script>
+"use strict";
+/* SAFE LOCAL STORAGE */
+function readNumber(key) {
+  try {
+    return Number(localStorage.getItem(key) || 0);
+  } catch {
+    return 0;
+  }
+}
+function saveNumber(key, value) {
+  try {
+    localStorage.setItem(key, String(value));
+  } catch {}
+}
+function readText(key) {
+  try {
+    return localStorage.getItem(key) || "";
+  } catch {
+    return "";
+  }
+}
+function saveText(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {}
+}
+/* NAVIGATION */
+function showPage(pageId, button) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.remove("active");
+  });
+  const page = document.getElementById(pageId);
+  if (page) {
+    page.classList.add("active");
+  }
+  document.querySelectorAll("nav button").forEach(navButton => {
+    navButton.classList.remove("active");
+  });
+  if (button) {
+    button.classList.add("active");
+  } else {
+    const matchingButton = document.querySelector(
+      'nav button[data-page="' + pageId + '"]'
+    );
+    if (matchingButton) {
+      matchingButton.classList.add("active");
+    }
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+/* MATHEMATICS SOLVER */
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
+}
+function displayResult(title, lines) {
+  const result = document.getElementById("mathResult");
+  result.innerHTML =
+    "<h3>" + escapeHTML(title) + "</h3>" +
+    lines.map(line => "<p>" + escapeHTML(line) + "</p>").join("");
+  result.style.display = "block";
+}
+function solveMath() {
+  const input = document.getElementById("mathInput").value.trim();
+  if (!input) {
+    displayResult("Enter a question first", [
+      "Please type a mathematics question."
+    ]);
+    return;
+  }
+  const normalized = input
+    .toLowerCase()
+    .replace(/[−–]/g, "-")
+    .replace(/\s+/g, "")
+    .replace(/[?!.]+$/g, "");
+  let solution = null;
+  if (/^2x\+5=15$/.test(normalized)) {
+    solution = [
+      "Question: 2x + 5 = 15",
+      "Step 1: Subtract 5 from both sides.",
+      "2x = 15 - 5 = 10",
+      "Step 2: Divide both sides by 2.",
+      "x = 10 / 2",
+      "Final answer: x = 5",
+      "Check: 2(5) + 5 = 15."
+    ];
+  } else if (/^x\+3=7$/.test(normalized)) {
+    solution = [
+      "Question: x + 3 = 7",
+      "Subtract 3 from both sides.",
+      "x = 7 - 3",
+      "Final answer: x = 4",
+      "Check: 4 + 3 = 7."
+    ];
+  } else if (/^10%of200$/.test(normalized)) {
+    solution = [
+      "Question: Find 10% of 200.",
+      "Convert 10% into a fraction: 10/100.",
+      "Multiply 10/100 by 200.",
+      "Answer: 20."
+    ];
+  } else if (/^1\/2\+1\/2$/.test(normalized)) {
+    solution = [
+      "Question: 1/2 + 1/2",
+      "The denominators are the same.",
+      "Add the numerators: 1 + 1 = 2.",
+      "2/2 = 1.",
+      "Final answer: 1."
+    ];
+  } else if (/^meanof2,4,6$/.test(normalized)) {
+    solution = [
+      "Add the numbers: 2 + 4 + 6 = 12.",
+      "There are 3 numbers.",
+      "Mean = 12 / 3.",
+      "Final answer: 4."
+    ];
+  }
+  saveNumber("msa_attempts", readNumber("msa_attempts") + 1);
+  updateProgress();
+  if (solution) {
+    displayResult("✅ Step-by-step solution", solution);
+  } else {
+    displayResult("Question received!", [
+      "This prototype does not yet solve this type of question.",
+      "Try: 2x + 5 = 15",
+      "Or: x + 3 = 7",
+      "Or: 10% of 200",
+      "A real AI service will be connected in a later development stage."
+    ]);
+  }
+}
+/* LESSONS */
+const lessons = {
+  Fractions: [
+    "A fraction represents part of a whole.",
+    "Example: 1/2 + 1/2 = 1.",
+    "Try adding 1/4 + 1/4."
+  ],
+  Algebra: [
+    "Letters can represent unknown numbers.",
+    "Example: x + 3 = 7.",
+    "Subtract 3 from both sides to find x = 4."
+  ],
+  Geometry: [
+    "Geometry studies shapes, angles and measurements.",
+    "A triangle has three sides.",
+    "The angles inside a triangle add up to 180 degrees."
+  ],
+  Statistics: [
+    "Statistics helps us understand collected data.",
+    "The mean is the total divided by the number of values.",
+    "Example: (2 + 4 + 6) / 3 = 4."
+  ]
+};
+function openLesson(topic) {
+  const content = document.getElementById("lessonContent");
+  const items = lessons[topic] || [];
+  content.innerHTML =
+    "<div class='lesson'><h3>" + escapeHTML(topic) + "</h3>" +
+    items.map(item => "<p>" + escapeHTML(item) + "</p>").join("") +
+    "</div>";
+  showPage("learn");
+}
+/* QUIZ */
+const questions = [
+  {
+    question: "What is 5 + 7?",
+    options: ["10", "12", "13", "14"],
+    answer: 1,
+    explanation: "5 + 7 = 12."
+  },
+  {
+    question: "Solve x + 3 = 8.",
+    options: ["x = 3", "x = 4", "x = 5", "x = 11"],
+    answer: 2,
+    explanation: "Subtract 3 from both sides: x = 8 - 3 = 5."
+  },
+  {
+    question: "What is 50% of 80?",
+    options: ["20", "30", "40", "50"],
+    answer: 2,
+    explanation: "50% means one half. Half of 80 is 40."
+  },
+  {
+    question: "How many sides does a triangle have?",
+    options: ["2", "3", "4", "5"],
+    answer: 1,
+    explanation: "A triangle has three sides."
+  },
+  {
+    question: "What is the mean of 2, 4 and 6?",
+    options: ["3", "4", "5", "6"],
+    answer: 1,
+    explanation: "(2 + 4 + 6) / 3 = 4."
+  }
+];
+let quizIndex = -1;
+let quizCorrect = 0;
+let quizAnswered = false;
+function nextQuestion() {
+  const area = document.getElementById("quizArea");
+  const result = document.getElementById("quizResult");
+  const nextButton = document.getElementById("nextQuiz");
+  result.style.display = "none";
+  if (quizIndex === -1) {
+    quizIndex = 0;
+    quizCorrect = 0;
+  } else if (quizIndex >= questions.length) {
+    quizIndex = 0;
+    quizCorrect = 0;
+  } else if (quizAnswered) {
+    quizIndex++;
+  }
+  quizAnswered = false;
+  if (quizIndex >= questions.length) {
+    const score = quizCorrect;
+    result.innerHTML =
+      "<h3>Quiz complete! 🎉</h3>" +
+      "<p>You scored " + score + " out of " + questions.length + ".</p>" +
+      "<p>Percentage: " +
+      Math.round(score / questions.length * 100) + "%</p>";
+    result.style.display = "block";
+    area.innerHTML = "";
+    nextButton.textContent = "Try Again";
+    quizIndex = -1;
+    return;
+  }
+  const q = questions[quizIndex];
+  area.innerHTML =
+    "<p><strong>Question " + (quizIndex + 1) + " of " +
+    questions.length + "</strong></p>" +
+    "<div class='question-box'>" + escapeHTML(q.question) + "</div>" +
+    q.options.map((option, index) =>
+      "<button class='option' onclick='answerQuestion(" +
+      index + ")'>" + escapeHTML(option) + "</button>"
+    ).join("");
+  nextButton.textContent = "Next Question";
+}
+function answerQuestion(index) {
+  if (quizAnswered || quizIndex < 0 || quizIndex >= questions.length) {
+    return;
+  }
+  quizAnswered = true;
+  const q = questions[quizIndex];
+  const correct = index === q.answer;
+  if (correct) {
+    quizCorrect++;
+    saveNumber("msa_quiz_correct", readNumber("msa_quiz_correct") + 1);
+  }
+  saveNumber("msa_quiz_answered", readNumber("msa_quiz_answered") + 1);
+  updateProgress();
+  const result = document.getElementById("quizResult");
+  result.innerHTML =
+    "<h3>" + (correct ? "Correct! 🎉" : "Not quite!") + "</h3>" +
+    "<p>" + escapeHTML(q.explanation) + "</p>";
+  result.style.display = "block";
+  document.querySelectorAll("#quizArea .option").forEach(button => {
+    button.disabled = true;
+    button.style.opacity = ".65";
+  });
+  document.getElementById("nextQuiz").textContent =
+    quizIndex === questions.length - 1 ? "See Results" : "Next Question";
+}
+/* SETTINGS */
+function saveSettings() {
+  const name = document.getElementById("studentName").value.trim();
+  const studentClass = document.getElementById("studentClass").value;
+  saveText("msa_student_name", name);
+  saveText("msa_student_class", studentClass);
+  const result = document.getElementById("settingsResult");
+  result.textContent = "Settings saved on this device.";
+  result.style.display = "block";
+}
+/* PROGRESS */
+function updateProgress() {
+  document.getElementById("solvedCount").textContent =
+    readNumber("msa_attempts");
+  document.getElementById("progressCount").textContent =
+    readNumber("msa_attempts");
+  document.getElementById("quizCount").textContent =
+    readNumber("msa_quiz_answered");
+  document.getElementById("correctCount").textContent =
+    readNumber("msa_quiz_correct");
+}
+function resetProgress() {
+  if (!confirm("Are you sure you want to reset your progress?")) {
+    return;
+  }
+  ["msa_attempts", "msa_quiz_answered", "msa_quiz_correct"].forEach(key => {
+    saveNumber(key, 0);
+  });
+  updateProgress();
+}
+/* INITIALIZE */
+document.getElementById("studentName").value =
+  readText("msa_student_name");
+document.getElementById("studentClass").value =
+  readText("msa_student_class") || "JSS1";
+updateProgress();
+</script>
+</body>
+</html>
